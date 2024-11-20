@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
   before_action :set_restaurant
+  before_action :set_review, only: [:destroy]
 
   def new
     @review = Review.new
@@ -16,7 +17,6 @@ class ReviewsController < ApplicationController
   end
 
   def destroy
-    @review = Review.find(params[:id])
     Rails.logger.info "Review found: #{@review.inspect}"
     @review.destroy!
     redirect_to restaurant_path(@review.restaurant), status: :see_other, notice: 'Review was successfully destroyed.'
@@ -26,6 +26,16 @@ class ReviewsController < ApplicationController
 
   def set_restaurant
     @restaurant = Restaurant.find(params[:restaurant_id])
+  rescue ActiveRecord::RecordNotFound
+    Rails.logger.error "Restaurant not found with ID: #{params[:restaurant_id]}"
+    redirect_to root_path, alert: 'Restaurant not found.'
+  end
+
+  def set_review
+    @review = Review.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    Rails.logger.error "Review not found with ID: #{params[:id]}"
+    redirect_to @restaurant, alert: 'Review not found.'
   end
 
   def review_params
