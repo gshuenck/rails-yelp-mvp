@@ -1,0 +1,35 @@
+<nav class="navbar  md-5 p-3 navbar-light" style="background-color: #e1eef7;">
+  <div>
+    <button class="btn btn-outline-primary">
+      <%= link_to 'Home', root_path %>
+    </button>
+  </div>
+  <div>
+    <button class="btn btn-outline-primary">
+      <%= link_to 'New Restaurant', new_restaurant_path %>
+    </button>
+  </div>
+</nav>
+
+
+<div class="container mt-3">
+  <div class="row mt-5">
+    <div class="col-sm">
+      <% @restaurants.each do |restaurant| %>
+        <div class="restaurant mb-3">
+          <h2 id="restaurant_<%= restaurant.id %>">
+            <%= link_to restaurant.name, restaurant_path(restaurant) %>
+          </h2>
+          <% restaurant.reviews.each do |review| %>
+            <div class="review mb-3">
+              <p id="review<%= review.id %>">
+                <strong>Content:</strong> <%= review.content %><br>
+                <strong>Rating:</strong> <%= review.rating %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
